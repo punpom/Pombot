@@ -14,17 +14,17 @@ const client = new Client({
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 const TMDB_TOKEN = process.env.TMDB_TOKEN;
-const prefix = "$";
+const BOT_PREFIX = process.env.BOT_PREFIX;
 
 client.on("ready", () => {
   console.log("Logged in.");
 });
 
 client.on("messageCreate", (message) => {
-  if (!message.content.startsWith(prefix)) return;
-  if (message.content.startsWith(prefix + "s")) {
+  if (!message.content.startsWith(BOT_PREFIX)) return;
+  if (message.content.startsWith(BOT_PREFIX + "s")) {
     const args = message.content
-      .slice(prefix.length)
+      .slice(BOT_PREFIX.length)
       .trim()
       .replace(/\([^)]*\)/g, "")
       .split(/ +/);
@@ -67,6 +67,7 @@ client.on("messageCreate", (message) => {
           const overview = data.results[0]?.overview;
           const date = data.results[0]?.first_air_date;
           const image = data.results[0]?.poster_path;
+          const average = data.results[0]?.vote_average.toFixed(1).toString();
           if (name == undefined) {
             message.channel.send("Cette série n'existe pas");
           } else {
